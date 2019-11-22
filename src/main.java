@@ -1,158 +1,365 @@
-import java.util.ArrayList;
 import java.util.Scanner;
+import java.sql.*;
+public class Main {
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+        String name;
+        int age;
+        String subject;
+        int option;
+        int course;
+        int id;
+        String module;
+        String userName;
+        String password;
+        int sop;
+	
+	//connection object
+        Connection connection=DBConnection.getInstance().getConnection();
+        Scanner input=new Scanner(System.in);
 
-public class main {
-    public static void main(String args[]){
-        Scanner scan=new Scanner(System.in);
-        ArrayList <students> studentArrayList=new ArrayList<>();
-        ArrayList <lectures> lectureArrayList=new ArrayList<>();
+        System.out.println("Welcome to University Management System");
+        System.out.println("");
+        System.out.println("Please select an option to proceed");
+        System.out.println("Press [1] Register as a Student");
+        System.out.println("Press [2] Register as a Lecturer");
 
-        int a=1,b,c,d,e=196,l;
-        String k,m,n,o,p;
-        while(e==196){
-            System.out.println("Welcome to univercity managemtn system");
-            System.out.println("plese select an opption");
-            System.out.println("enter 1 to register as student enter 2 to register as lecturer enter 3 to exit");
-            a=scan.nextInt();
-            if(a== 1){
-                System.out.println("enter name");
-                k=scan.next();
-                System.out.println("enter age");
-                l=scan.nextInt();
-                students stu=new students(k,l);
-                stu.showCourses();
-                System.out.println("enter course id ");
-                m=scan.next();
-                stu.selectCouse(m);
-                
-                stu.show();
-            }
-            else if(a==2){
-                System.out.println("enter name");
-                k=scan.next();
-                System.out.println("enter age");
-                l=scan.nextInt();
-                lectures lec=new lectures(k,l);
-                System.out.println("Registrer completed");
-                lec.show();
-            }
-            else if(a==3){
-                e=0;
-            }
-            else{
-                System.out.println("wrong command");
-            }
-        }
-
-    }
-}
-
-class students extends couses{
-    private String name;
-    private int age;
-    private ArrayList <String> selectCourses=new ArrayList<String>();
-
-    public students() {
-    	
-    }
-    
-    public students(String name,int age){
-        this.name=name;
-        this.age=age;
-    }
-    
-    public void setName(String name) {
-    	this.name=name;
-    }
-    
-    public void setAge(int age) {
-    	this.age=age;
-    }
-    
-    public String getName() {
-    	return name;
-    }
-    
-    public int getAge() {
-    	return age;
-    }
-
-    public void selectCouse(String id){
-        selectCourses.add(id);
-    }
-
-    public void show(){
-    	System.out.println("register completed");
-        System.out.println("Name : "+name);
-        System.out.println("Age : "+age);
-        System.out.println("Course "+courseId.get(Integer.parseInt(selectCourses.get(0)))+"   "+courseName.get(Integer.parseInt(selectCourses.get(0))));
+        option=input.nextInt();
+        Subject sub=new Subject();
         
-    }
+        switch (option){
+            case 1:
+                System.out.println("Select [1] for Sign up, [2} for sign in");
+                sop=input.nextInt();
+                switch (sop) {
+                    case 1:
+                    System.out.println("Student Registration");
+                    System.out.println("");
+                    System.out.println("Please Submit following information");
+                    System.out.println("Student ID:");
+                    id = input.nextInt();
+                    System.out.println("1:  Name:");
+                    input.nextLine();
+                    name = input.nextLine();
+                    System.out.println("2:  Age:");
+                    age = input.nextInt();
+                    System.out.println("User name:");
+                    userName = input.next();
+                    System.out.println("Password:");
+                    password = input.next();
+                    System.out.println("3: Select course number from following list,");
+                    System.out.println("[1]" + modules.SENG1111_Introduction_to_Programming);
+                    System.out.println("[2]" + modules.SENG1112_Fndamantales_of_Engineering);
+                    System.out.println("[3]" + modules.SENG1113_Data_Structures_and_Algorithms);
+                    course = input.nextInt();
+                    Student student = new Student();
 
-}
+                    switch (course) {
+                        case 1:
+                            sub.setSubName(modules.SENG1111_Introduction_to_Programming);
+                            student.setCource(String.valueOf(modules.SENG1111_Introduction_to_Programming));
+                            break;
+                        case 2:
+                            sub.setSubName(modules.SENG1112_Fndamantales_of_Engineering);
+                            student.setCource(String.valueOf(modules.SENG1112_Fndamantales_of_Engineering));
+                            break;
+                        case 3:
+                            sub.setSubName(modules.SENG1113_Data_Structures_and_Algorithms);
+                            student.setCource(String.valueOf(modules.SENG1113_Data_Structures_and_Algorithms));
+                            break;
+                        default:
+                    }
+                    student.setStdAge(age);
+                    student.setStdName(name);
+                    student.setId(id);
+                    student.setPassowrd(password);
+                    student.setUserName(userName);
+                    PreparedStatement stm = connection.prepareStatement("Insert Into Student Values(?,?,?,?,?,?);");
 
-class couses{
-    protected ArrayList <String> courseId =new ArrayList<String>(); //{"SENG 11111","SENG 11112","SENG 11113"
-    protected ArrayList <String> courseName=new ArrayList<String>(); // {"INTRDUCTION TO PROGRAMMING","FUNDUMENTALS OF ENGINNERING", "DATA STUCTURES AND ALGORITHEMS"}
+                    stm.setObject(1, student.getId());
+                    stm.setObject(2, student.getStdName());
+                    stm.setObject(3, student.getStdAge());
+                    stm.setObject(4, student.getUserName());
+                    stm.setObject(5, student.getPassowrd());
+                    stm.setObject(6, student.getCource());
 
-    public couses(){
-        courseId.add("SENG 11111");
-        courseId.add("SENG 11112");
-        courseId.add("SENG 11113");
-        courseName.add("INTRDUCTION TO PROGRAMMING");
-        courseName.add("FUNDUMENTALS OF ENGINNERING");
-        courseName.add("DATA STUCTURES AND ALGORITHEMS");
-    }
+                    stm.executeUpdate();
+                    System.out.println("Student Registration Completed");
+                    System.out.println("Name    :" + student.getStdName());
+                    System.out.println("Age     :" + student.getStdAge());
+                    System.out.println("Subject :" + sub.getSubName());
+                    break;
+                    case 2:
+                        System.out.println("Student Login form");
+
+                        System.out.println("User Name:");
+                        userName=input.next();
+                        System.out.println("Password:");
+                        password=input.next();
+
+                        Statement  stmt=connection.createStatement();
+                        ResultSet   rs=stmt.executeQuery( "select * from Student where userName='"+userName+"'and password='"+password+"';");
+                        while (rs.next()) {
+                            System.out.println( "Hi " + rs.getString(2));
+                            System.out.println("You have successfully registered for this course:");
+                            System.out.println(" "+rs.getString(6));
+                        }
+                        break;
+                        default:
+                }
+                break;
 
 
+            case 2:
+                System.out.println("Select [1] for Sign up, [2} for sign in");
+                sop=input.nextInt();
+                switch (sop) {
 
-    public void showCourses(){
-        for (int a=0;a<courseId.size();a++){
-            System.out.print(a+" "+courseId.get(a));
-            System.out.println(" - "+courseName.get(a));
+                    case 1:
+                    System.out.println("Lecturer Registration");
+                    System.out.println("");
+                    System.out.println("Please Submit following information");
+                        System.out.println("Lecturer ID:");
+                        id = input.nextInt();
+                        System.out.println("1:  Name:");
+                        input.nextLine();
+                        name = input.nextLine();
+                        System.out.println("2:  Age:");
+                        age = input.nextInt();
+                        System.out.println("User name:");
+                        userName = input.next();
+                        System.out.println("Password:");
+                        password = input.next();
+                    System.out.println("3: Select course number from following list,");
+                    System.out.println("[1]" + modules.SENG1111_Introduction_to_Programming);
+                    System.out.println("[2]" + modules.SENG1112_Fndamantales_of_Engineering);
+                    System.out.println("[3]" + modules.SENG1113_Data_Structures_and_Algorithms);
+                    course = input.nextInt();
+                    Lecturer lecturer = new Lecturer();
+                    switch (course) {
+                        case 1:
+                            sub.setSubName(modules.SENG1111_Introduction_to_Programming);
+                            lecturer.setCourse(String.valueOf(modules.SENG1111_Introduction_to_Programming));
+                            break;
+                        case 2:
+                            sub.setSubName(modules.SENG1112_Fndamantales_of_Engineering);
+                            lecturer.setCourse(String.valueOf(modules.SENG1112_Fndamantales_of_Engineering));
+                            break;
+                        case 3:
+                            sub.setSubName(modules.SENG1113_Data_Structures_and_Algorithms);
+                            lecturer.setCourse(String.valueOf(modules.SENG1113_Data_Structures_and_Algorithms));
+                            break;
+                        default:
+                    }
+                    lecturer.setName(name);
+                    lecturer.setAge(age);
+                    lecturer.setId(id);
+                    lecturer.setUserName(userName);
+                    lecturer.setPassword(password);
+                        PreparedStatement stm = connection.prepareStatement("Insert Into Lecturer Values(?,?,?,?,?,?);");
+                        stm.setObject(1, lecturer.getId());
+                        stm.setObject(2, lecturer.getName());
+                        stm.setObject(3, lecturer.getAge());
+                        stm.setObject(4, lecturer.getUserName());
+                        stm.setObject(5, lecturer.getPassword());
+                        stm.setObject(6, lecturer.getCourse());
+                        stm.executeUpdate();
+                    System.out.println("Lecturer Registration Completed");
+                    System.out.println("Name    :" + lecturer.getName());
+                    System.out.println("Age     :" + lecturer.getAge());
+                    System.out.println("Subject :" + sub.getSubName());
+                    break;
+                    case 2:
+                        System.out.println("Lecturer Login form");
+
+                        System.out.println("User Name:");
+                        userName=input.next();
+                        System.out.println("Password:");
+                        password=input.next();
+
+                        Statement  stmt=connection.createStatement();
+                        ResultSet   rs=stmt.executeQuery( "select * from Lecturer where userName='"+userName+"'and password='"+password+"';");
+                        while (rs.next()) {
+                            System.out.println( "Hi " + rs.getString(2));
+                            System.out.println("You have successfully registered for this course:");
+                            System.out.println(" "+rs.getString(6));
+                        }
+                        break;
+                    default:
+                }
+                break;
+
         }
+
+
+
+
     }
 }
 
-class lectures extends couses{
+//lecture class
+class Lecturer {
+    private int id;
     private String name;
     private int age;
-    
-    public lectures() {
-    	
+    private String userName;
+    private String password;
+    private String course;
+
+    public Lecturer() {
     }
 
-    public lectures(String name,int age){
-        this.name=name;
-        this.age=age;
+    public Lecturer(int id, String name, int age, String userName, String password, String course) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.userName = userName;
+        this.password = password;
+        this.course = course;
     }
-    
-    public void setName(String name) {
-    	this.name=name;
+
+    public String getCourse() {
+        return course;
     }
-    
-    public void setAge(int age) {
-    	this.age=age;
+
+    public void setCourse(String course) {
+        this.course = course;
     }
-    
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getName() {
-    	return name;
+        return name;
     }
-    
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public int getAge() {
-    	return age;
+        return age;
     }
 
-    public void addCourses(String id,String name){
-        courseId.add(id);
-        courseName.add(name);
+    public void setAge(int age) {
+        this.age = age;
     }
 
-    public void show(){
-        System.out.println("Name : "+name);
-        System.out.println("Age : "+age);
+}
+//student class
+class Student
+{
+    private int id;
+    private String stdName;
+    private int stdAge;
+    private String userName;
+    private String passowrd;
+    private String cource;
 
+    public Student() {
+    }
+
+    public Student(int id, String stdName, int stdAge, String userName, String passowrd, String cource) {
+        this.id = id;
+        this.stdName = stdName;
+        this.stdAge = stdAge;
+        this.userName = userName;
+        this.passowrd = passowrd;
+        this.cource = cource;
+    }
+
+    public String getCource() {
+        return cource;
+    }
+
+    public void setCource(String cource) {
+        this.cource = cource;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassowrd() {
+        return passowrd;
+    }
+
+    public void setPassowrd(String passowrd) {
+        this.passowrd = passowrd;
+    }
+
+    public String getStdName() {
+        return stdName;
+    }
+
+    public void setStdName(String stdName) {
+        this.stdName = stdName;
+    }
+
+    public int getStdAge() {
+        return stdAge;
+    }
+
+    public void setStdAge(int stdAge) {
+        this.stdAge = stdAge;
+    }
+
+
+}
+//subject class
+class Subject
+{
+    private modules subName;
+
+    public Subject() {
+    }
+
+    public Subject(modules subName) {
+        this.subName = subName;
+    }
+
+    public modules getSubName() {
+        return subName;
+    }
+
+    public void setSubName(modules subName) {
+        this.subName = subName;
     }
 }
 
+public enum modules {
+    SENG1111_Introduction_to_Programming,SENG1112_Fndamantales_of_Engineering,SENG1113_Data_Structures_and_Algorithms
+}
 
