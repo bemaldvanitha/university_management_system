@@ -18,7 +18,7 @@ public class Main {
         Scanner input=new Scanner(System.in);
 
         System.out.println("Welcome to University Management System");
-        System.out.println("");
+        System.out.println("   ");
         System.out.println("Please select an option to proceed");
         System.out.println("Press [1] Register as a Student");
         System.out.println("Press [2] Register as a Lecturer");
